@@ -33,9 +33,9 @@ def send_email(msg):
 
 def send_email_with_attachement(filename,file_path,msg_text):
 
-    fromaddr = "radhakrishtask@gmail.com"
-    password = "Radha@123"
-    toaddr = "radhakrishr36@gmail.com"
+    fromaddr = "--"
+    password = "--"
+    toaddr = "--"
 
     print(filename)
     print(file_path)
