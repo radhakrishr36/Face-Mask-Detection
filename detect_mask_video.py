@@ -16,6 +16,7 @@ from PIL import Image as im
 from PIL import Image
 import numpy as np
 from send_email import send_email_with_attachement
+from image_comparison import find_similarity
 
 file_path="Final_output/"
 filename_mask="mask.png"
@@ -98,7 +99,6 @@ ap.add_argument("-c", "--confidence", type=float, default=0.5,
 	help="minimum probability to filter weak detections")
 args = vars(ap.parse_args())
 
-
 # load our serialized face detector model from disk
 print("[INFO] loading face detector model...")
 prototxtPath = os.path.sep.join([args["face"], "deploy.prototxt"])
@@ -115,7 +115,6 @@ print("[INFO] starting video stream...")
 vs = VideoStream(src=0).start()
 time.sleep(10.0)
 
-
 # loop over the frames from the video stream
 while True:
 	# grab the frame from the threaded video stream and resize it
@@ -129,7 +128,7 @@ while True:
 
 	# loop over the detected face locations and their corresponding
 	# locations
-	for (box, pred,face) in zip(locs, preds,faces):
+	for (box,pred,face) in zip(locs, preds,faces):
 		# unpack the bounding box and predictions
 		(startX, startY, endX, endY) = box
 		(mask, withoutMask) = pred
@@ -138,7 +137,7 @@ while True:
 		if len(faces)>0:
 		
 			img = Image.fromarray(face1, 'RGB')
-			img.save('my.png')
+			img.save(file_path+'my.png')
 
 		# determine the class label and color we'll use to draw
 		# the bounding box and text
@@ -166,18 +165,25 @@ while True:
 			img = Image.fromarray(cv2.rectangle(frame, (startX, startY), (endX, endY), color, 2), 'RGB')
 			img.save(file_path+filename_un_mask)
 
+		# call image comparsion model
+
+		input_img=file_path+'my.png'
+		manoj="C:/Users/Radha/Desktop/Notes/Jerome/Face-Mask-Detection-master/Face-Mask-Detection-master/sample_images/manoj.jpg"
+		abhishikth="C:/Users/Radha/Desktop/Notes/Jerome/Face-Mask-Detection-master/Face-Mask-Detection-master/sample_images/abij.jpg"
+
+		img_result=find_similarity(input_img,manoj,abhishikth)
+		print(img_result)
 
 		if label_orginal == 'No Mask':
 
 			# send email
 			try:
 
-				send_email_with_attachement(filename_un_mask,file_path+filename_un_mask)
+				send_email_with_attachement(filename_un_mask,file_path+filename_un_mask,img_result)
 
 			except Exception as e:
 
 				print('Exception on send email',e)			
-
 
 	# show the output frame
 	cv2.imshow("Frame", frame)

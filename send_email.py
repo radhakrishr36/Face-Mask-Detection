@@ -1,5 +1,4 @@
 
-
 # libraries to be imported
 import smtplib, ssl
 import smtplib
@@ -14,9 +13,9 @@ def send_email(msg):
 
         port = 465  # For SSL
         smtp_server = "smtp.gmail.com"
-        sender_email = "----"  # Enter your address
-        receiver_email = "-----"  # Enter receiver address
-        password = "-----"
+        sender_email = ""  # Enter your address
+        receiver_email = ""  # Enter receiver address
+        password = ""
 
         message = """\nSubject: Face mask ouputs\n"""+str(msg)
 
@@ -32,12 +31,11 @@ def send_email(msg):
 
         print("Exceptoin in send_email",e)
 
+def send_email_with_attachement(filename,file_path,msg_text):
 
-def send_email_with_attachement(filename,file_path):
-
-    fromaddr = "-----------------"
-    password="-------"
-    toaddr = "---------"
+    fromaddr = "radhakrishtask@gmail.com"
+    password = "Radha@123"
+    toaddr = "radhakrishr36@gmail.com"
 
     print(filename)
     print(file_path)
@@ -55,13 +53,12 @@ def send_email_with_attachement(filename,file_path):
     msg['Subject'] = "Face Mask Detection Output"
 
     # string to store the body of the mail
-    body = "This person not weared Mask"
+    body = msg_text+" :: not weared Mask"
 
     # attach the body with the msg instance
     msg.attach(MIMEText(body, 'plain'))
 
     # open the file to be sent
-
     attachment = open(file_path, "rb")
 
     # instance of MIMEBase and named as p
@@ -97,13 +94,12 @@ def send_email_with_attachement(filename,file_path):
     s.quit()
 
 
+# filename='un_mask'
+# file_path='C:/Users/Radha/Desktop/Notes/Jerome/Face-Mask-Detection-master/Face-Mask-Detection-master/Final_output/un_mask.png'
+# msg='welcome'
 
 
-
-
-    
-
-
+# send_email_with_attachement(filename,file_path,msg)
 
 # send_email("filename : images/pic2.jpg \n:  Objects [0,2] Not weired mask in this image")
 
